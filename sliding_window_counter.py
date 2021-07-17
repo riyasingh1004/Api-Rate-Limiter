@@ -58,9 +58,9 @@ class SlidingWindowCounterRateLimiter:
 	def shouldAllowServiceCall(self, userId):
 		with self.lock:
 			for api in self.apiList:
-				if userId not in self.ratelimiterMap:
+				if userId not in self.ratelimiterMap[api]:
 					raise Exception("User is not present")
-			userTimestamps = self.ratelimiterMap[userId]
+			userTimestamps = self.ratelimiterMap[api][userId]
 			with userTimestamps.lock:
 				currentTimestamp = self.getCurrentTimestampInSec()
 				# remove all the existing older timestamps
