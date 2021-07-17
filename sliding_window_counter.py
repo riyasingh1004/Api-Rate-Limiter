@@ -40,27 +40,26 @@ class SlidingWindowCounterRateLimiter:
 		
 	def addUser(self, userId, requests=100, windowTimeInMin=60):
 		with self.lock:
-			for api in self.apilist:
-				if userId in self.ratelimiterMap[api]:
+			if userId in self.ratelimiterMap:
 					raise Exception("User already present")
-				self.ratelimiterMap[api][userId] = RequestCounters(requests, windowTimeInMin)
+			self.ratelimiterMap[userId] = {}
+			for api in self.apiList:
+				self.ratelimiterMap[userId][api] = RequestCounters(requests, windowTimeInMin)
 
 	def removeUser(self, userId):
 		with self.lock:
-			for api in self.apilist:
-				if userId in self.ratelimiterMap[api]:
-					del self.ratelimiterMap[api][userId]
+			if userId in self.ratelimiterMap:
+					del self.ratelimiterMap[userId]
 
 	@classmethod
 	def getCurrentTimestampInSec(cls):
 		return int(round(time.time()))
 
-	def shouldAllowServiceCall(self, userId):
+	def shouldAllowServiceCall(self, userId, api):
 		with self.lock:
-			for api in self.apiList:
-				if userId not in self.ratelimiterMap[api]:
+			if userId not in self.ratelimiterMap:
 					raise Exception("User is not present")
-			userTimestamps = self.ratelimiterMap[api][userId]
+			userTimestamps = self.ratelimiterMap[userId][api]
 			with userTimestamps.lock:
 				currentTimestamp = self.getCurrentTimestampInSec()
 				# remove all the existing older timestamps
@@ -71,3 +70,15 @@ class SlidingWindowCounterRateLimiter:
 				if userTimestamps.totalCounts > userTimestamps.requests:
 					return False
 				return True
+
+
+myRateLimiter = SlidingWindowCounterRateLimiter(["api1", "api2","api3"])
+
+# if client request to avail api service for first time. -- default configuration
+myRateLimiter.addUser("Riya")
+
+# Before calling API for the user
+myRateLimiter.shouldAllowServiceCall("Riya", "api2")
+
+# if client de subscribe for the service.
+myRateLimiter.removeUser("Riya")
