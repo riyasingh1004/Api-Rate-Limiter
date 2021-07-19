@@ -1,8 +1,6 @@
-from concurrent import futures
-from time import sleep
 from sliding_window_counter import SlidingWindowCounterRateLimiter
 from client import clientGenerator
-import concurrent.futures, requests
+import concurrent.futures
 
 def addSingleUser(client):
     try:
