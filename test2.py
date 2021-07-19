@@ -24,7 +24,7 @@ myRateLimiter = SlidingWindowCounterRateLimiter(apiEndpoints)
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executer:
     for res in executer.map(addSingleUser, clients, timeout=30):
-        print("[] Added " + res.name + " to the database starting new thread...")
+        print("[] Ended " + res.name + " thread... starting new thread...")
 
 # if client de subscribe for the service.
 for cid in range(10):
