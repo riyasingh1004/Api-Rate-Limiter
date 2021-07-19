@@ -7,7 +7,7 @@ apiEndpoints = ["api1", "api2","api3"]
 
 client1 = clientGenerator(apiEndpoints, [ [ -1, -1 ], [ 60, 90 ], [ -1, -1 ] ], "Riya")
 client2 = clientGenerator(apiEndpoints, [ [ -1, -1 ], [ 60, 5 ], [ -1, -1 ] ], "Pratham")
-print(client2.apiRequest)
+
 myRateLimiter = SlidingWindowCounterRateLimiter(apiEndpoints)
 
 # if client request to avail api service for first time. -- default configuration
@@ -21,11 +21,10 @@ while(1):
     else:
         print("NOT ALLOWED")
     # Comment to strike the bottleneck
-    # sleep(0.4)
+    sleep(2)
     # To just req. at maximum limit -- aprox.
     # sleep(13)
     print(myRateLimiter.ratelimiterMap[client2.id]["api2"].counts)
-
 
 
 # if client de subscribe for the service.
