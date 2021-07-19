@@ -44,13 +44,13 @@ class SlidingWindowCounterRateLimiter:
 			self.ratelimiterMap[user.id] = {}
 			for api in self.apiList:
 				self.ratelimiterMap[user.id][api] = RequestCounters(user.apiRequest[api]['numOfReq'], user.apiRequest[api]['windowTime'])
-			print(" -- Adding -- " + str(user.name) + " to the database ...")
+			print(" -- Added -- " + str(user.name) + " to the database ...")
 
 	def removeUser(self, user):
 		with self.lock:
 			if user.id in self.ratelimiterMap:
 					del self.ratelimiterMap[user.id]
-			print("-- Removing -- " + str(user.name) + " from the database ...")
+			print("-- Removed -- " + str(user.name) + " from the database ...")
 
 	@classmethod
 	def getCurrentTimestampInSec(cls):
