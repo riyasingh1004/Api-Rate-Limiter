@@ -36,7 +36,7 @@ class SlidingWindowCounterRateLimiter:
 		self.lock = threading.Lock()
 		self.ratelimiterMap = {}
 		self.apiList = apiList
-		
+	# function to add the user
 	def addUser(self, user):
 		with self.lock:
 			if user.id in self.ratelimiterMap:
@@ -46,6 +46,7 @@ class SlidingWindowCounterRateLimiter:
 				self.ratelimiterMap[user.id][api] = RequestCounters(user.apiRequest[api]['numOfReq'], user.apiRequest[api]['windowTime'])
 			print(" -- Added -- " + str(user.name) + " to the database ...")
 
+	# function to remove the user
 	def removeUser(self, user):
 		with self.lock:
 			if user.id in self.ratelimiterMap:
@@ -56,6 +57,7 @@ class SlidingWindowCounterRateLimiter:
 	def getCurrentTimestampInSec(cls):
 		return int(round(time.time()))
 
+	# Function to check whether the api call made by the client is allowed or not
 	def shouldAllowServiceCall(self, user, api):
 		with self.lock:
 			if user.id not in self.ratelimiterMap:

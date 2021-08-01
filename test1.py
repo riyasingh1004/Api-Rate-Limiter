@@ -4,7 +4,7 @@ from client import clientGenerator
 
 apiEndpoints = ["api1", "api2","api3"]
 
-
+# -1 is passed to set to default values
 client1 = clientGenerator(apiEndpoints, [ [ -1, -1 ], [ 60, 90 ], [ -1, -1 ] ], "Riya")
 client2 = clientGenerator(apiEndpoints, [ [ -1, -1 ], [ 60, 5 ], [ -1, -1 ] ], "Pratham")
 
@@ -20,13 +20,13 @@ while(1):
         print("Allowed ...")
     else:
         print("NOT ALLOWED")
-    # Comment to strike the bottleneck
-    sleep(2)
-    # To just req. at maximum limit -- aprox.
+    # To check for calls exceeding rate limit
+    sleep(10)
+    # Comment above sleep and remove comment to check for calls within rate limit
     # sleep(13)
     print(myRateLimiter.ratelimiterMap[client2.id]["api2"].counts)
 
 
-# if client de subscribe for the service.
+# if client unsubscribe from the service.
 myRateLimiter.removeUser(client1)
 myRateLimiter.removeUser(client2)
